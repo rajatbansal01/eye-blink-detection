@@ -25,9 +25,10 @@ predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 TOTAL = 0
 COUNTER = 0
 
-def blink_count(frame, gray):
-    EYE_AR_THRESH = 0.23
-    EYE_AR_CONSEC_FRAMES = 2
+def blink_count(frame):
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    EYE_AR_THRESH = 0.25
+    EYE_AR_CONSEC_FRAMES = 1
     global TOTAL
     global COUNTER
     rects = detector(gray, 0)
@@ -64,8 +65,7 @@ def main():
     while True:
         success ,frame = cap.read()
         frame = imutils.resize(frame, width=450)
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        frame,TOTAL = blink_count(frame,gray)
+        frame,TOTAL = blink_count(frame)
         cv2.imshow("Frame", frame)
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
